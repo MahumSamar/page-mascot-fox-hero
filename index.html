@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>/page-mascot</title>
+<meta name="description" content="Skill to generate a character for the top of your page. It follows the reader's cursor and blinks when they poke it.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://d2ol7oe51mr4n9.cloudfront.net">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&family=Noto+Sans+Mono:wght@700&display=swap" rel="stylesheet">
+
+<!-- Sprite sheets hosted on Higgsfield (3x3 grids, 1080x1080) -->
+<link rel="preload" as="image" href="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0992446b-d8ae-4de6-ba5a-28b7b1418390.webp">
+<link rel="preload" as="image" href="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/e3691ba0-88a5-4bf7-b45c-baf80052817d.webp">
+
+<style>
+  :root {
+    --paper: #faf9f7;
+    --ink: #111111;
+    --body: #6b6b6b;
+    --line: #e4e2de;
+    --whisper: #b9b7b3;
+
+    --sheet-directions: url("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0992446b-d8ae-4de6-ba5a-28b7b1418390.webp");
+    --sheet-reactions: url("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/e3691ba0-88a5-4bf7-b45c-baf80052817d.webp");
+
+    /* one sprite cell; the fox itself fills ~64% of it */
+    --cell: clamp(190px, 17.9vw, 300px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Noto Sans", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: clamp(40px, 16.5vh, 170px) clamp(24px, 11vw, 185px) clamp(40px, 8vh, 96px);
+    overflow: hidden;
+  }
+
+  /* ---------- mascot ---------- */
+  .mascot {
+    display: block;
+    width: var(--cell);
+    aspect-ratio: 1;
+    /* pull the cell's empty margin out so the fox lines up with the text */
+    margin: calc(var(--cell) * -0.04) 0 calc(var(--cell) * -0.19) calc(var(--cell) * -0.19);
+    border: 0;
+    background-color: transparent;
+    background-image: var(--sheet-directions);
+    background-size: 300% 300%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border-radius: 24px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    transform-origin: 50% 80%;
+  }
+  .mascot.is-reacting { background-image: var(--sheet-reactions); }
+  .mascot.is-poked { animation: poke 420ms cubic-bezier(.3, 1.6, .5, 1); }
+  .mascot:focus-visible { outline: 2px solid var(--ink); outline-offset: -18px; }
+
+  @keyframes poke {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.06, .94); }
+    60%  { transform: scale(.98, 1.03); }
+    100% { transform: scale(1); }
+  }
+
+  /* ---------- copy ---------- */
+  h1 {
+    margin-top: clamp(40px, 8.2vh, 80px);
+    font-family: "Noto Sans Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-weight: 700;
+    font-size: clamp(38px, 4.06vw, 68px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .lede {
+    margin-top: clamp(12px, 1.1vw, 18px);
+    max-width: 27.5em;
+    font-size: clamp(16px, 1.43vw, 24px);
+    line-height: 1.55;
+    color: var(--body);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(8px, .9vw, 14px);
+    margin-top: clamp(22px, 2.3vw, 38px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5em;
+    min-height: 44px;
+    padding: clamp(11px, 1.15vw, 19px) clamp(15px, 1.3vw, 22px);
+    border: 1px solid var(--line);
+    border-radius: clamp(11px, 1.05vw, 18px);
+    background: transparent;
+    color: #3a3a3a;
+    font: 500 clamp(14px, 1.08vw, 18px)/1 "Noto Sans", system-ui, sans-serif;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color .15s, border-color .15s, transform .15s;
+  }
+  .btn:hover { background: #f1efeb; border-color: #d6d3ce; }
+  .btn:active { transform: translateY(1px); }
+  .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .btn svg { width: 1em; height: 1em; flex: none; }
+
+  .btn--primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .btn--primary:hover { background: #2a2a2a; border-color: #2a2a2a; }
+
+  .note {
+    margin-top: clamp(16px, 1.6vw, 26px);
+    font-size: clamp(12px, .8vw, 13.5px);
+    color: var(--whisper);
+  }
+
+  @media (max-width: 480px) {
+    .hero { padding-top: clamp(32px, 9vh, 80px); }
+    h1 { font-size: clamp(30px, 10.6vw, 44px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mascot.is-poked { animation: none; }
+    .btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<main class="hero">
+  <button class="mascot" id="mascot" type="button" aria-label="Poke the fox"></button>
+
+  <h1>/page-mascot</h1>
+  <p class="lede">Skill to generate a character for the top of your page. It follows the reader’s cursor and blinks when they poke it.</p>
+
+  <div class="actions">
+    <a class="btn btn--primary" href="#">Use one of the 53</a>
+    <a class="btn" href="#">Make your own</a>
+    <a class="btn" href="#">
+      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.34c-2.23.48-2.7-1.07-2.7-1.07-.36-.93-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.77-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg>
+      GitHub
+    </a>
+  </div>
+
+  <p class="note">Pick one below, or have an agent skill draw a new one.</p>
+</main>
+
+<script>
+(() => {
+  const fox = document.getElementById('mascot');
+  const POS = ['0%', '50%', '100%'];   // background-position per column / row
+  const REACTIONS = 9;                 // cells in the reactions sheet
+  const HOLD_MS = 1100;                // how long a reaction stays up
+
+  let look = { col: 1, row: 1 };       // direction cell the pointer asks for
+  let reaction = 0;                    // last reaction shown
+  let reactTimer = null;
+
+  const show = (col, row) => {
+    fox.style.backgroundPosition = `${POS[col]} ${POS[row]}`;
+  };
+
+  // Map the pointer to one of the nine direction cells.
+  const aim = (x, y) => {
+    const r = fox.getBoundingClientRect();
+    const dx = x - (r.left + r.width / 2);
+    const dy = y - (r.top + r.height * 0.45);   // the face sits a bit above centre
+    const dist = Math.hypot(dx, dy);
+
+    if (dist < r.width * 0.22) {
+      look = { col: 1, row: 1 };
+    } else {
+      const nx = dx / dist, ny = dy / dist;     // 0.38 ≈ sin(22.5°): eight even sectors
+      look = {
+        col: nx < -0.38 ? 0 : nx > 0.38 ? 2 : 1,
+        row: ny < -0.38 ? 0 : ny > 0.38 ? 2 : 1
+      };
+    }
+    if (!reactTimer) show(look.col, look.row);
+  };
+
+  const react = () => {
+    reaction = (reaction + 1) % REACTIONS;      // heart, sparkles, surprised… then loops
+    const i = reaction;
+    fox.classList.add('is-reacting');
+    show(i % 3, Math.floor(i / 3));
+
+    fox.classList.remove('is-poked');
+    void fox.offsetWidth;                       // restart the squash animation
+    fox.classList.add('is-poked');
+
+    clearTimeout(reactTimer);
+    reactTimer = setTimeout(() => {
+      reactTimer = null;
+      fox.classList.remove('is-reacting');
+      show(look.col, look.row);
+    }, HOLD_MS);
+  };
+
+  window.addEventListener('pointermove', e => aim(e.clientX, e.clientY), { passive: true });
+  window.addEventListener('pointerdown', e => aim(e.clientX, e.clientY), { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => {
+    look = { col: 1, row: 1 };
+    if (!reactTimer) show(1, 1);
+  });
+
+  fox.addEventListener('click', react);
+})();
+</script>
+</body>
+</html>
